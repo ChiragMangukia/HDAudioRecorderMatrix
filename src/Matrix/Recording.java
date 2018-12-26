@@ -5,7 +5,10 @@ import java.net.MalformedURLException;
 import java.time.Duration;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -49,7 +52,6 @@ public class Recording {
 		Thread.sleep(3000);
 		String currentActivity = driver.currentActivity();
 		String expectedActivity = ".SettingsActivity";
-		System.out.println(currentActivity);
 		if(currentActivity.equalsIgnoreCase(expectedActivity)) {} else {
 			driver.navigate().back();
 			driver.findElementByXPath("//android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.widget.LinearLayout/"
@@ -127,9 +129,40 @@ public class Recording {
 			selectMusicPicker();
 			switch (backgroundFile) {
 			case "MP3":
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bulleya (Mr-Jatt.com)\"));");
 				driver.findElementByXPath("//android.widget.TextView[@text='Bulleya (Mr-Jatt.com)']").click();
 				break;
-
+				
+			case "Stereo_WAV_16Bit_48KHz":
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Stereo_WAV_16Bit_48KHz\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='Stereo_WAV_16Bit_48KHz']").click();
+				break;
+				
+			case "Mono_AAC_16Bit_96KHz":
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Mono_M4A_16Bit_96KHz\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='Mono_M4A_16Bit_96KHz']").click();
+				break;
+				
+			case "Mono_WAV_16Bit_192KHz_10Sec":
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Mono_WAV_16Bit_192KHz\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='Mono_WAV_16Bit_192KHz']").click();
+				break;
+				
+			case "MQA":	
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Doin' It Right (feat. Panda Bear)\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='Doin\' It Right (feat. Panda Bear)']").click();
+				break;
+				
+			case "AIFF":	
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"AIFF_32bit(96khz)\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='AIFF_32bit(96khz)']").click();
+				break;
+				
+			case "Stereo_FLAC_16Bit_88.2KHz_10Sec.flac":
+				driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Stereo_FLAC_16Bit_88.2KHz\"));");
+				driver.findElementByXPath("//android.widget.TextView[@text='Stereo_FLAC_16Bit_88.2KHz']").click();
+				break;
+				
 			default:
 				System.out.println("Invalid file");
 				driver.navigate().back();
@@ -212,18 +245,40 @@ public class Recording {
 		driver.runAppInBackground(Duration.ofMillis(3500));
 		Thread.sleep(3000);
 		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/recordButton']").click();
-		Thread.sleep(3500);
-		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/bookmarkButton']").click();
-		Thread.sleep(3500);
-		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/bookmarkButton']").click();
-		Thread.sleep(3500);
-		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/bookmarkButton']").click();
-		Thread.sleep(3500);
-		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/bookmarkButton']").click();
-		Thread.sleep(5000);
+		Thread.sleep(1000);
+		AndroidElement bookmarkButton = driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/bookmarkButton']");
+		bookmarkButton.click();
+		Thread.sleep(1000);
+		bookmarkButton.click();
+		Thread.sleep(1000);
+		bookmarkButton.click();
+		Thread.sleep(1000);
+		bookmarkButton.click();
+		Thread.sleep(2000);
 		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/stopButton']").click();
 		Thread.sleep(3000);
-		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/saveButtonLayout']").click();
+		driver.runAppInBackground(Duration.ofMillis(3000));
+		Thread.sleep(3000);
+		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/saveButton']").click();
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		String element = "//android.widget.LinearLayout[@index=1]";
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(element)));
+		Thread.sleep(3000);
+		driver.navigate().back();
+		driver.navigate().back();
+		driver.runAppInBackground(Duration.ofMillis(3500));
+		Thread.sleep(3000);
+		//Open Normal mode
+		driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
+				+ "android.widget.ImageButton").click();
+		Thread.sleep(3000);
+		driver.findElementByXPath("//android.support.v4.widget.DrawerLayout/android.widget.ListView[1]/android.widget.LinearLayout[1]").click();
+		Thread.sleep(3000);
+		//Open Custom mode
+		driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
+				+ "android.widget.ImageButton").click();
+		Thread.sleep(3000);
+		driver.findElementByXPath("//android.support.v4.widget.DrawerLayout/android.widget.ListView[1]/android.widget.LinearLayout[3]").click();
 	}
 
 }
