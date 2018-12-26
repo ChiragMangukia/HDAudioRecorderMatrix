@@ -1,21 +1,28 @@
 package Matrix;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.openqa.selenium.ScreenOrientation;
 
-public class test extends MyMethods {
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+
+public class test {
+	
+	protected static AndroidDriver<AndroidElement> driver;
 
 	public static void main(String[] args) throws EncryptedDocumentException, IOException {
 		
 		for(String temp : MyMethods.getSettingsFromMatrix()) {
-			String settings = (temp.split("/")[0]).split("_")[0];	//Spliting the string from /
-			String format = (temp.split("/")[0]).split("_")[1];		//Spliting the string from /
-			String bitDepth = (temp.split("/")[0]).split("_")[2];	//Spliting the string from /
-			String samplingRate = (temp.split("/")[0]).split("_")[3].replaceAll("[^\\d.]", "");	//Spliting the string from / and removing alphabets
-			System.out.println(settings + format + bitDepth + samplingRate);
+			String settings = (temp.split("/")[1]);	// Splitting the string from /
+			
+			
 		}
 
 	}
+	
+	
 
 }
