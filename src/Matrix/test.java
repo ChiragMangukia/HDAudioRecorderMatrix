@@ -1,11 +1,9 @@
 package Matrix;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
