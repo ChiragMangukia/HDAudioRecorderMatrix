@@ -1,6 +1,9 @@
 package Matrix;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -31,6 +34,38 @@ public class MyMethods {
 			System.out.println("No Data");
 		}
 		return dataArray;				
+	}
+	
+	public static String pullRecordedFiles() throws IOException {
+
+		//Create a Folder		
+		File file = new File("C:\\AudioRecorderMatrix");
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                System.out.println("Directory is created!");
+            } else {
+                System.out.println("Failed to create directory!");
+            }
+        }
+		
+        Runtime runtime = Runtime.getRuntime();
+		String command = "adb pull /sdcard/AudioRecorder C:\\AudioRecorderMatrix";
+		Process process = runtime.exec(command);
+
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+		BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+		// Read the output from the command
+		while ((stdInput.readLine()) != null) {
+		    return "Success";
+		}
+
+		// Read any errors from the attempted command
+		while ((stdError.readLine()) != null) {
+		    return "Error";
+		}
+		return "";
 	}
 	
 }

@@ -21,7 +21,7 @@ public class Recording {
 	public static void main(String[] args) throws EncryptedDocumentException, IOException, InterruptedException {
 		setDriver();
 		acceptEulaPopup();
-		acceptHelpActivity();
+		//acceptHelpActivity();
 		openCustomMode();
 		//openSettings();
 		//setSettings("FLAC", "16", "192");
@@ -104,7 +104,7 @@ public class Recording {
 			driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/"
 					+ "android.widget.LinearLayout/android.widget.TextView[1]").click();
 			driver.findElementByXPath("//android.widget.CheckedTextView[@text='" + mic + "']").click();
-			Thread.sleep(7000);
+			Thread.sleep(3000);
 		}
 	}
 	
@@ -173,7 +173,7 @@ public class Recording {
 			Thread.sleep(5000);
 			studioModeFileLimitPopup();
 			startRecording();
-			System.out.println("(" + i + ") " + "File Recorded -> Settings: " + settings + "_" + format + "_" + bitDepth + "_" + samplingRate + " || Background File: " + backgroundFile);
+			System.out.println("(" + i + ") " + "File Recorded -> Settings: " + settings + "_" + format + "_" + bitDepth + " bit_" + samplingRate + "kHz || Background File: " + backgroundFile);
 			i++;
 		}
 	}
@@ -206,7 +206,7 @@ public class Recording {
 	public static void acceptHelpActivity() throws InterruptedException {
 		Thread.sleep(3000);
 		String currentActivity = driver.currentActivity();
-		String expectedActivity = "com.lge.hifirecorder.help.HelpActivity";
+		String expectedActivity = ".HelpActivity";
 		while(currentActivity == expectedActivity) {
 			Thread.sleep(3500);
 			driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/tip_help_next_button']").click();
