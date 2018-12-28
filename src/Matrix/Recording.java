@@ -3,6 +3,7 @@ package Matrix;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.Duration;
+import static java.time.Duration.ofSeconds;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.openqa.selenium.By;
@@ -10,17 +11,26 @@ import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+import static io.appium.java_client.touch.LongPressOptions.longPressOptions;
+import static io.appium.java_client.touch.offset.ElementOption.element;
 
 public class Recording {
 	
 	protected static AndroidDriver<AndroidElement> driver;
 	public static String settings;
+	public static String format;
+	public static String bitDepth;
+	public static String samplingRate;
+	public static String backgroundFile;
 
 	public static void main(String[] args) throws EncryptedDocumentException, IOException, InterruptedException {
 		setDriver();
 		acceptEulaPopup();
+		//renameFile("Hello Automation");
+		//renameRest();
 		//acceptHelpActivity();
 		openCustomMode();
 		//openSettings();
@@ -33,7 +43,7 @@ public class Recording {
 	}
 	
 	public static void setDriver() throws MalformedURLException {
-		Recording.driver = Base.Capabilities();
+		driver = Base.Capabilities();
 	}
 	
 	private static void openCustomMode() throws MalformedURLException, InterruptedException {
@@ -70,6 +80,7 @@ public class Recording {
 				+ "").click();
 		
 		if(fileType.contains("M4A") || fileType.contains("WAV") || fileType.contains("FLAC")) {
+			driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + fileType + "\"));");
 			driver.findElementByXPath("//android.widget.CheckedTextView[@text='" + fileType + "']").click();
 		}
 		
@@ -80,6 +91,7 @@ public class Recording {
 				+ "").click();
 		
 		if(bitDepth.contains("16") || bitDepth.contains("24"))	{
+			driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + bitDepth + " bit\"));");
 			driver.findElementByXPath("//android.widget.CheckedTextView[@text='" + bitDepth + " bit']").click();
 		}
 		
@@ -90,6 +102,7 @@ public class Recording {
 				+ "").click();
 		
 		if(samplingRate.contains("44.1") || samplingRate.contains("48") || samplingRate.contains("88.2") || samplingRate.contains("96") || samplingRate.contains("176.4") || samplingRate.contains("192"))	{
+			driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"" + samplingRate +" kHz\"));");
 			driver.findElementByXPath("//android.widget.CheckedTextView[@text='" + samplingRate + " kHz']").click();
 		}
 		Thread.sleep(3000);
@@ -116,11 +129,6 @@ public class Recording {
 			String bitDepth = (temp.split("/")[0]).split("_")[2].replaceAll("[^\\d.]", "");	// Splitting the string from / and removing alphabets
 			String samplingRate = (temp.split("/")[0]).split("_")[3].replaceAll("[^\\d.]", "");	// Splitting the string from / and removing alphabets
 			String backgroundFile = (temp.split("/")[1]);
-			if(settings.contains("Stereo")) {
-				driver.rotate(ScreenOrientation.LANDSCAPE);
-			} else {
-				driver.rotate(ScreenOrientation.PORTRAIT);
-			}
 			Thread.sleep(3000);
 			openSettings();
 			Thread.sleep(3000);
@@ -245,7 +253,7 @@ public class Recording {
 		Thread.sleep(3000);
 	}
 	
-	public static void startRecording() throws InterruptedException {
+	public static void startRecording() throws InterruptedException, MalformedURLException {
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(1000);
 		if(settings.contains("Stereo")) {
@@ -281,15 +289,93 @@ public class Recording {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(element)));
 		Thread.sleep(3000);
 		driver.navigate().back();
+		driver.runAppInBackground(Duration.ofMillis(2000));
+		Thread.sleep(2000);
+		if(ScreenOrientation.LANDSCAPE != null) {
+			driver.rotate(ScreenOrientation.LANDSCAPE);
+		} else {
+			driver.rotate(ScreenOrientation.PORTRAIT);
+		}
+		String main = format + "_" + bitDepth + "_" + "_" + samplingRate;
+		//renameFile(main, backgroundFile);
 		driver.navigate().back();
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(3000);
+		if(!driver.getOrientation().equals("PORTRAIT")) {
+			driver.rotate(ScreenOrientation.PORTRAIT);
+		}
+		Thread.sleep(3000);
+		//Collapse bookmarks
+		//driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/"
+			//	+ "android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/android.widget.LinearLayout[1]/"
+			//	+ "android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.LinearLayout[2]").click();
+		
+		
+		
+		
 		//Remove Background File
 		driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
 				+ "android.widget.LinearLayout/android.widget.TextView[1]").click();
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(2500);
 		
+	}
+	
+	public static void renameFile(String fileName, String backgroundFile) throws InterruptedException, MalformedURLException {
+	
+		
+		
+		AndroidElement fileCustomStudio = driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]"
+				+ "/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/"
+				+ "android.widget.LinearLayout[1]");
+		
+		AndroidElement fileCustomOriginal = driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]"
+				+ "/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/"
+				+ "android.widget.LinearLayout[2]");
+		
+		TouchAction touchAction = new TouchAction(driver);
+		touchAction.longPress(longPressOptions().withElement(element(fileCustomStudio)).withDuration(ofSeconds(5))).perform();
+		Thread.sleep(2000);
+		driver.findElementByXPath("//android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[2]/"
+				+ "android.widget.RelativeLayout").click();
+		driver.findElementByXPath("//android.widget.EditText").clear();
+		driver.findElementByXPath("//android.widget.EditText").sendKeys(fileName);
+		Thread.sleep(5000);
+		touchAction.longPress(longPressOptions().withElement(element(fileCustomOriginal)).withDuration(ofSeconds(5))).perform();
+		Thread.sleep(2000);
+		driver.findElementByXPath("//android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[2]/"
+				+ "android.widget.RelativeLayout").click();
+		driver.findElementByXPath("//android.widget.EditText").clear();
+		driver.findElementByXPath("//android.widget.EditText").sendKeys(backgroundFile);
+	}
+	
+	public static void renameRest() throws MalformedURLException, InterruptedException {
+		openCustomMode();
+		Thread.sleep(2000);
+		//driver.runAppInBackground(Duration.ofMillis(1500));
+		//Thread.sleep(1500);
+		driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
+				+ "android.widget.LinearLayout/android.widget.TextView[2]").click();
+		Thread.sleep(2000);
+		driver.runAppInBackground(Duration.ofMillis(1500));
+		Thread.sleep(3000);
+		//driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Studio originals\"));");
+		driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(className(\"android.widget.LinearLayout\").index(12));");
+		Thread.sleep(1500);
+		driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(className(\"android.widget.LinearLayout\").index(11));");
+		Thread.sleep(1500);
+		System.out.println("Hi");
+		AndroidElement fileCustomStudio = driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/"
+				+ "android.widget.LinearLayout/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/android.widget.LinearLayout[8]");
+	
+		int e = driver.findElementsByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.widget.LinearLayout/"
+				+ "android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/android.widget.LinearLayout").size();
+		System.out.println(e);
+		TouchAction touchAction = new TouchAction(driver);
+		touchAction.longPress(longPressOptions().withElement(element(fileCustomStudio)).withDuration(ofSeconds(5))).release().perform();
+		
+		
+		//touchAction.longPress(longPressOptions().withElement(element(fileCustomStudio)).withDuration(ofSeconds(5))).release().perform();
 	}
 
 }
