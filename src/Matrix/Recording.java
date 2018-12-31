@@ -291,17 +291,15 @@ public class Recording {
 		driver.navigate().back();
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(2000);
-		if(ScreenOrientation.LANDSCAPE != null) {
-			driver.rotate(ScreenOrientation.LANDSCAPE);
-		} else {
+		if(driver.getOrientation().equals("LANDSCAPE")) {
 			driver.rotate(ScreenOrientation.PORTRAIT);
 		}
-		String main = format + "_" + bitDepth + "_" + "_" + samplingRate;
-		//renameFile(main, backgroundFile);
+		//String main = format + "_" + bitDepth + "_" + "_" + samplingRate;
+		renameFile("HI", "Helllo");
 		driver.navigate().back();
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(3000);
-		if(!driver.getOrientation().equals("PORTRAIT")) {
+		if(driver.getOrientation().equals("LANDSCAPE")) {
 			driver.rotate(ScreenOrientation.PORTRAIT);
 		}
 		Thread.sleep(3000);
@@ -328,6 +326,9 @@ public class Recording {
 		AndroidElement fileCustomStudio = driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]"
 				+ "/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/"
 				+ "android.widget.LinearLayout[1]");
+		
+		String customStudioFileName = fileCustomStudio.getText();
+		System.out.println(customStudioFileName);
 		
 		AndroidElement fileCustomOriginal = driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]"
 				+ "/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.RelativeLayout/android.widget.ExpandableListView/"
