@@ -6,11 +6,7 @@ import java.time.Duration;
 import static java.time.Duration.ofSeconds;
 
 import org.apache.poi.EncryptedDocumentException;
-import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -28,7 +24,7 @@ public class Recording {
 
 	public static void main(String[] args) throws EncryptedDocumentException, IOException, InterruptedException {
 		setDriver();
-		acceptEulaPopup();
+		//acceptEulaPopup();
 		//renameFile("Hello Automation");
 		//renameRest();
 		//acceptHelpActivity();
@@ -59,7 +55,7 @@ public class Recording {
 				+ "android.widget.ImageButton").click();
 		Thread.sleep(3000);
 		driver.findElementByXPath("//android.widget.FrameLayout/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[3]/"
-				+ "android.widget.RelativeLayout").click();
+				+ "android.widget.LinearLayout/android.widget.RelativeLayout").click();
 		Thread.sleep(3000);
 		String currentActivity = driver.currentActivity();
 		String expectedActivity = ".SettingsActivity";
@@ -284,9 +280,9 @@ public class Recording {
 		}
 		Thread.sleep(3000);
 		driver.findElementByXPath("//android.widget.Button[@resource-id='com.lge.hifirecorder:id/saveButton']").click();
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		String element = "//android.widget.LinearLayout[@index=1]";
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(element)));
+		//WebDriverWait wait = new WebDriverWait(driver, 30);
+		//String element = "//android.widget.LinearLayout[@index=1]";
+		//wait.until(ExpectedConditions.elementToBeClickable(By.xpath(element)));
 		Thread.sleep(3000);
 		driver.navigate().back();
 		driver.runAppInBackground(Duration.ofMillis(2000));
@@ -295,7 +291,7 @@ public class Recording {
 			driver.rotate(ScreenOrientation.PORTRAIT);
 		}
 		//String main = format + "_" + bitDepth + "_" + "_" + samplingRate;
-		renameFile("HI", "Helllo");
+		//renameFile("HI", "Helllo");
 		driver.navigate().back();
 		driver.runAppInBackground(Duration.ofMillis(2000));
 		Thread.sleep(3000);
@@ -312,10 +308,10 @@ public class Recording {
 		
 		
 		//Remove Background File
-		driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
-				+ "android.widget.LinearLayout/android.widget.TextView[1]").click();
-		driver.runAppInBackground(Duration.ofMillis(2000));
-		Thread.sleep(2500);
+		//driver.findElementByXPath("//android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/"
+		//		+ "android.widget.LinearLayout/android.widget.TextView[1]").click();
+	//	driver.runAppInBackground(Duration.ofMillis(2000));
+		//Thread.sleep(2500);
 		
 	}
 	
